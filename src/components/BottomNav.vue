@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation fixed hide-on-scroll v-model="activeTab" :input-value="state.showNav">
+  <v-bottom-navigation fixed v-model="activeTab" :input-value="state.showNav">
     <v-row align="center" justify="center">
       <v-btn large plain text :value="tabValues[0]">
         <span> Not read</span>

@@ -1,8 +1,10 @@
 <template>
   <v-app>
     <v-main>
-      <bottom-nav />
-      <router-view></router-view>
+      <v-container class="pa-0">
+        <bottom-nav />
+        <router-view></router-view>
+      </v-container>
     </v-main>
   </v-app>
 </template>

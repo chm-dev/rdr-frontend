@@ -1,34 +1,34 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-list three-line>
-          <template v-for="(article, key) in articles">
 
-            <v-list-item :key="key">
+  <v-row>
+    <v-col cols="12">
+      <v-list three-line>
+        <template v-for="(article, key) in articles">
+
+          <v-list-item :key="key">
+            <router-link :to="'/article/'+article.id" :key="key">
+              <v-list-item-avatar rounded="0">
+
+                <v-img :src="article.coverUrl" v-if="article.coverUrl"></v-img>
+              </v-list-item-avatar>
+            </router-link>
+            <v-list-item-content>
               <router-link :to="'/article/'+article.id" :key="key">
-                <v-list-item-avatar rounded="0">
-
-                  <v-img :src="article.coverUrl" v-if="article.coverUrl"></v-img>
-                </v-list-item-avatar>
+                <v-list-item-title> {{ article.title }}</v-list-item-title>
               </router-link>
-              <v-list-item-content>
-                <router-link :to="'/article/'+article.id" :key="key">
-                  <v-list-item-title> {{ article.title }}</v-list-item-title>
-                </router-link>
-                <v-list-item-subtitle>
-                  {{article.summary}}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+              <v-list-item-subtitle>
+                {{article.summary}}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
 
-            <v-divider v-if="articles.length > key + 1" :key="article.url" inset></v-divider>
-          </template>
-        </v-list>
+          <v-divider v-if="articles.length > key + 1" :key="article.url" inset></v-divider>
+        </template>
+      </v-list>
 
-      </v-col>
-    </v-row>
-  </v-container>
+    </v-col>
+  </v-row>
+
 </template>
 
 <script>
@@ -85,8 +85,16 @@ export default {
     }
   },
   mounted () {
-    fetchContent( this.$route.params.id ).then( res =>
-      this.articles=res );
+    //  fetchContent( this.$route.params.id ).then( res =>
+    //    this.articles=res );
+  },
+  beforeRouteEnter ( to, from, next ) {
+    next( vm => {
+      fetchContent( vm.$route.params.id ).then( res =>
+        vm.articles=res );
+
+
+    } );
   },
 
 
