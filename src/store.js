@@ -5,6 +5,7 @@ export default {
     ],
     activeTab      : 'new',
     showNav        : true,
+    transitionName : 'slide-x-transition',
 
     changeActiveTab: function (tabValue) {
       if (tabValue !== this.activeTab) {

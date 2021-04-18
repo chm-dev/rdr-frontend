@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation fixed v-model="activeTab" :input-value="state.showNav">
+  <v-bottom-navigation fixed v-model="activeTab">
     <v-row align="center" justify="center">
       <v-btn large plain text :value="tabValues[0]">
         <span> Not read</span>
@@ -18,27 +18,27 @@
 </template>
 
 <script>
-import store from '../store';
+import store from "../store";
 
 export default {
-  data () {
+  data() {
     return {
       activeTab: store.state.activeTab,
       tabValues: store.state.tabValues,
       showNav: store.state.showNav,
-      state: store.state
+      state: store.state,
+      store: store
     };
   },
-  watch: {
-    activeTab ( newValue ) {
-      console.log( this.$route );
-      store.state.changeActiveTab( newValue );
-      this.$router.push( '/list/'+newValue );
-    },
 
-  },
-}
+  watch: {
+    activeTab(newValue) {
+      console.log(this.$route);
+      store.state.changeActiveTab(newValue);
+      this.$router.push("/list/" + newValue);
+    }
+  }
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

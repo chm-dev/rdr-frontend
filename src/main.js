@@ -17,6 +17,7 @@ Vue.use(VueTimeago, {
   name  : 'Timeago', // Component name, `Timeago` by default
   locale: 'en'
 });
+
 const router = new VueRouter({
   mode  : 'history',
   base  : __dirname,
