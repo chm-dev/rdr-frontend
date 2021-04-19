@@ -11,6 +11,7 @@ Vue.config.productionTip = false;
 Vue.config.devtools      = true;
 
 import App from './App.vue';
+import './registerServiceWorker'
 
 Vue.use(VueRouter);
 Vue.use(VueTimeago, {
