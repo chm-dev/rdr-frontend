@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8888 --host r.chm.codes",
+    "serve": "vue-cli-service serve --port 8888 ",
     "serve-proxy": "vue-cli-service serve --port 1335 --host localhostser",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
