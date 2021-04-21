@@ -30,7 +30,7 @@
       :style="
         'background-image: url(' +
           content.coverUrl +
-          '); background-size: cover; background-position: 50% 50%;'
+          '); background-size: cover; background-position: 50% 50%; padding-top: 48px;'
       "
     >
       <div

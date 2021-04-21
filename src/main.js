@@ -3,7 +3,10 @@ import VueRouter from 'vue-router';
 import vuetify from './plugins/vuetify';
 import VueTimeago from 'vue-timeago';
 
+
 import config from './config';
+const {backendUrl} = config;
+
 import store from './store';
 import List from './components/List';
 import Article from './components/Article';
@@ -11,7 +14,7 @@ import Login from './components/Login';
 import Auth from './components/Auth';
 
 Vue.config.productionTip = false;
-Vue.config.devtools      = true;
+Vue.config.devtools = true;
 
 import App from './App.vue';
 import './registerServiceWorker';
@@ -19,59 +22,107 @@ import axios from 'axios';
 
 Vue.use(VueRouter);
 Vue.use(VueTimeago, {
-  name  : 'Timeago', // Component name, `Timeago` by default
+  name: 'Timeago', // Component name, `Timeago` by default
   locale: 'en'
 });
 
 const router = new VueRouter({
-  mode  : 'history',
-  base  : __dirname,
+  mode: 'history',
+  base: __dirname,
   routes: [
     {
-      path     : '/auth',
-      name     : 'Auth',
+      path: '/auth',
+      name: 'Auth',
       component: Auth
-    }, {
-      path     : '/login',
-      name     : 'Login',
+    },
+    {
+      path: '/login',
+      name: 'Login',
       component: Login
-    }, {
-      path     : '/list/:id',
-      name     : 'Article List',
+    },
+    {
+      path: '/list/:id',
+      name: 'Article List',
       component: List
-    }, {
-      path     : '/article/:id',
-      name     : 'Article View',
+    },
+    {
+      path: '/article/:id',
+      name: 'Article View',
       component: Article
-    }, {
-      path    : '/',
+    },
+    {
+      path: '/',
       redirect: '/list/' + store.state.activeTab
-    }, {
-      path    : '*',
+    },
+    {
+      path: '*',
       redirect: '/list/' + store.state.activeTab
     }
   ]
 });
+
+//* Verify AUTH
+
 router.beforeEach((to, from, next) => {
+  //* Case - no token saved in ls
   if (!localStorage.jwt && to.name !== 'Login') {
     router.push('/login');
     next();
+    return;
   }
 
-  if (!sessionStorage.jwtValidated || Date.now() - sessionStorage.jwtValidated > 300000) {
+  //* Case - token was not validated in this session or was validated longer then 5 mins ago
+  if (localStorage.jwt && (!sessionStorage.jwtValidated || Date.now() - sessionStorage.jwtValidated > 300000)) {
     //5 mins
     const jwt = localStorage.jwt;
-    axios.post(`${config.backendUrl}/auth/verify-token`, {jwt: jwt}).then(response => {
-      if (response.status === 200) 
-        sessionStorage.jwtValidated = Date.now();
-      console.log('Token ok');
-    }).catch(error => {
-      console.error(error);
-      next();
-    });
+    axios
+      .post(`${backendUrl}/auth/verify-token`, { jwt: jwt })
+      .then(response => {
+        if (response && response.status === 200)
+        { sessionStorage.jwtValidated = Date.now()
+        if (!axios.defaults.headers.common['Authorization'] || !axios.defaults.headers.common['Authorization'].includes(jwt))
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + jwt;
+
+        console.log('Token ok');}
+      })
+      .catch(error => {
+        console.error(Object.keys(error));
+
+    if (localStorage.jwt) delete localStorage.jwt
+    if (axios.defaults.headers.common['Authorization'])    delete axios.defaults.headers.common['Authorization']
+
+      });
+  }
+  if (
+    localStorage.jwt &&
+    (!axios.defaults.headers.common['Authorization'] ||
+      !axios.defaults.headers.common['Authorization'].includes(localStorage.jwt))
+  ) {
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.jwt;
   }
   next();
 });
+
+//* Get all unauthorised requests to backend which are unauthorised 4xx -> redirect to login
+axios.interceptors.response.use(function (response) {
+
+  return response;
+}, function (error) {
+
+ // console.log(Object.keys(error));
+  
+  const {url} = error.response.config
+  const {status} = error.response
+//  console.log(url,status);
+  if (url.includes(backendUrl) && status >= 400 && status < 500 && router.currentRoute.name !== 'Login'){
+        router.push({name: 'Login', params: { errorMessage: 'Please login' }})
+    
+    return
+  }
+  return Promise.reject(error);
+});
+
+
 new Vue({
   vuetify,
   store,

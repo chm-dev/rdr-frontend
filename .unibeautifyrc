@@ -80,7 +80,7 @@
         "jsx_brackets": true,
         "end_with_comma": false,
         "indent_comments": true,
-        "break_chained_methods": false,
+        "break_chained_methods": true,
         "max_preserve_newlines": 1,
         "space_after_anon_function": true,
         "multiline_ternary": "always",
@@ -100,8 +100,8 @@
         "indent_chained_methods": false,
         "remove_trailing_whitespace": true,
         "beautifiers": [
-            "Prettier",
             "Pretty Diff",
+            "Prettier",
             "ESLint"
         ]
     },

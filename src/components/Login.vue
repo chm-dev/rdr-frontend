@@ -87,21 +87,21 @@ export default {
         })
         .then(response => {
           // Handle success.
-          console.log("Well done!");
-          console.log("User profile", response.data.user);
           console.log("User token", response.data.jwt);
           localStorage.jwt = response.data.jwt;
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.jwt;
           this.$router.push(this.source || "/");
         })
         .catch(error => {
-          console.log(error);
+          this.locked = false;
           // Handle error.
           console.log("An error occurred:", error.response);
           this.errorMessage =
-            error.response.data.data[0].messages[0].message || "Login error";
+            (error.response.data.data &&
+              error.response.data.data[0].messages[0].message) ||
+            "Login error";
         });
-
-      setTimeout(() => (this.locked = false), 1500);
     },
     enterHandle(ev) {
       if (ev.key === "Enter") this.doLogin();
