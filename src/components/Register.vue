@@ -4,7 +4,7 @@
       <div class="mx-auto d-block" style="max-width: 640px">
         <v-card class="elevation-1 mx-auto">
           <v-toolbar dark>
-            <v-toolbar-title>Login</v-toolbar-title>
+            <v-toolbar-title>Register</v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <div v-if="errorMessage">
@@ -24,6 +24,16 @@
                 :rules="[() => !!login || 'This field is required']"
               ></v-text-field>
               <v-text-field
+                v-model="email"
+                autofocus
+                prepend-icon="mdi-email"
+                name="email"
+                label="Email address(for password reset only)"
+                type="text"
+                @keydown="enterHandle"
+                :rules="[() => !!email || 'This field is required']"
+              ></v-text-field>
+              <v-text-field
                 v-model="password"
                 id="password"
                 prepend-icon="mdi-lock"
@@ -31,6 +41,20 @@
                 label="Password"
                 type="password"
                 @keydown="enterHandle"
+              ></v-text-field>
+              <v-text-field
+                v-model="password2"
+                id="password2"
+                prepend-icon="mdi-lock"
+                name="password2"
+                label="Repeat password"
+                type="password"
+                @keydown="enterHandle"
+                :rules="[
+                  () =>
+                    (!!password2 && password2 === password) ||
+                    'Passwords do not match'
+                ]"
               ></v-text-field>
             </v-form>
           </v-card-text>
@@ -40,31 +64,17 @@
               block
               color="primary"
               elevation="1"
-              @click="doLogin"
+              @click="doRegister"
               :loading="locked"
               :disabled="!formValid || locked"
-              >Login
+              >Register
             </v-btn>
           </v-card-actions>
         </v-card>
         <p class="my-4 text-center">or</p>
-        <v-row>
-          <v-col>
-            <v-tooltip top>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn text color="secondary" block v-bind="attrs" v-on="on">
-                  Reset password
-                </v-btn>
-              </template>
-              <span>Not implemented yet.</span>
-            </v-tooltip>
-          </v-col>
-          <v-col>
-            <v-btn text color="primary" block to="/register">
-              Create new account
-            </v-btn>
-          </v-col>
-        </v-row>
+        <v-btn text color="primary" block class="" to="/login">
+          Login to existitng account
+        </v-btn>
       </div>
     </v-flex>
   </v-container>
@@ -81,15 +91,20 @@ export default {
       config: config,
       login: "",
       password: "",
+      password2: "",
       formValid: false,
       locked: false,
-      errorMessage: ""
+      errorMessage: "",
+      email: ""
     };
   },
   props: {
     source: String
   },
   methods: {
+    doRegister() {
+      alert("soon ;)");
+    },
     doLogin() {
       if (!this.formValid) return false;
       this.errorMessage = "";

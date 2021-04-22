@@ -12,7 +12,7 @@ import List from './components/List';
 import Article from './components/Article';
 import Login from './components/Login';
 import Auth from './components/Auth';
-
+import Register from "./components/Register";
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 
@@ -41,6 +41,11 @@ const router = new VueRouter({
       component: Login
     },
     {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
       path: '/list/:id',
       name: 'Article List',
       component: List
@@ -64,8 +69,12 @@ const router = new VueRouter({
 //* Verify AUTH
 
 router.beforeEach((to, from, next) => {
+  if (to.name === 'Register'){
+    next();
+    return
+  }
   //* Case - no token saved in ls
-  if (!localStorage.jwt && to.name !== 'Login') {
+  if (!localStorage.jwt && (to.name !== 'Login')) {
     router.push('/login');
     next();
     return;
