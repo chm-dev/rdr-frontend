@@ -85,7 +85,7 @@ import axios from "axios";
 import config from "../config";
 
 export default {
-  name: "Login",
+  name: "Register",
   data: () => {
     return {
       config: config,
@@ -102,24 +102,27 @@ export default {
     source: String
   },
   methods: {
-    doRegister() {
+    _doRegister() {
       alert("soon ;)");
     },
-    doLogin() {
+    doRegister() {
       if (!this.formValid) return false;
       this.errorMessage = "";
       this.locked = true;
       const _password = this.password;
-      this.password = "";
+      this.password = ""; // so password is an actual input value for as short time as needed
       console.log(_password);
       const { backendUrl } = this.config;
+
       axios
-        .post(`${backendUrl}/auth/local`, {
-          identifier: this.login,
+        .post(`${backendUrl}/auth/local/register`, {
+          username: this.login,
+          email: this.email,
           password: _password
         })
         .then(response => {
           // Handle success.
+          this.$emit("snackbar", "Success. Logging you in.");
           console.log("User token", response.data.jwt);
           localStorage.jwt = response.data.jwt;
           axios.defaults.headers.common["Authorization"] =
@@ -130,14 +133,16 @@ export default {
           this.locked = false;
           // Handle error.
           console.log("An error occurred:", error.response);
+          console.log(error);
           this.errorMessage =
             (error.response.data.data &&
               error.response.data.data[0].messages[0].message) ||
-            "Login error";
+            "Register error";
         });
     },
+
     enterHandle(ev) {
-      if (ev.key === "Enter") this.doLogin();
+      if (ev.key === "Enter") this.doRegister();
     }
   }
 };

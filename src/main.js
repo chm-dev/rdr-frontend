@@ -69,12 +69,9 @@ const router = new VueRouter({
 //* Verify AUTH
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'Register'){
-    next();
-    return
-  }
+
   //* Case - no token saved in ls
-  if (!localStorage.jwt && (to.name !== 'Login')) {
+  if (!localStorage.jwt && (to.name !== 'Login') && (to.name !== 'Register')) {
     router.push('/login');
     next();
     return;
@@ -123,7 +120,7 @@ axios.interceptors.response.use(function (response) {
   const {url} = error.response.config
   const {status} = error.response
 //  console.log(url,status);
-  if (url.includes(backendUrl) && status >= 400 && status < 500 && router.currentRoute.name !== 'Login'){
+  if (url.includes(backendUrl) && status >= 400 && status < 500 && router.currentRoute.name !== 'Login' &&  router.currentRoute.name !== 'Register'){
         router.push({name: 'Login', params: { errorMessage: 'Please login' }})
     
     return
