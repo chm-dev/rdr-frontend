@@ -13,6 +13,8 @@ import Article from './components/Article';
 import Login from './components/Login';
 import Auth from './components/Auth';
 import Register from "./components/Register";
+import Add from "./components/Add";
+
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 
@@ -54,6 +56,11 @@ const router = new VueRouter({
       path: '/article/:id',
       name: 'Article View',
       component: Article
+    },
+    {
+      path: '/add/:url',
+      name: 'Add',
+      component: Add
     },
     {
       path: '/',
