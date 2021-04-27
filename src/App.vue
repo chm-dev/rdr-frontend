@@ -16,16 +16,18 @@
           fixed
           bottom
           right
+          v-if="$route.name !== 'Login' && $route.name !== 'Register'"
         >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </v-container>
     </v-main>
-    <v-snackbar v-model="snackbar" timeout="2500">{{ snackInfo }}</v-snackbar>
+
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-text class="pt-8">
           <v-text-field
+            v-model="url"
             label="Url to add"
             autofocus
             :rules="[
@@ -42,12 +44,15 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn text color="primary" @click="dialog = false">
+          <v-btn text color="primary" @click="add">
             Submit
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="snackbar" timeout="2500">
+      {{ snackInfo }}
+    </v-snackbar>
   </v-app>
 </template>
 <script>
@@ -58,7 +63,8 @@ export default {
       transitionName: "slide-left",
       snackbar: false,
       dialog: false,
-      snackInfo: ""
+      snackInfo: "",
+      url: ""
     };
   },
   watch: {
@@ -71,7 +77,15 @@ export default {
     onSnackbar: function(info) {
       this.snackbar = true;
       this.snackInfo = info;
+    },
+    add: function() {
+      this.dialog = false;
+      this.$router.push(`/add/?url=${encodeURIComponent(this.url)}`);
+      this.url = "";
     }
+  },
+  mounted() {
+    console.log(this.$route);
   }
 };
 </script>

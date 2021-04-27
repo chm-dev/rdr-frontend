@@ -58,7 +58,7 @@ const router = new VueRouter({
       component: Article
     },
     {
-      path: '/add/:url',
+      path: '/add',
       name: 'Add',
       component: Add
     },
@@ -127,7 +127,7 @@ axios.interceptors.response.use(function (response) {
   const {url} = error.response.config
   const {status} = error.response
 //  console.log(url,status);
-  if (url.includes(backendUrl) && status >= 400 && status < 500 && router.currentRoute.name !== 'Login' &&  router.currentRoute.name !== 'Register'){
+  if (url.includes(backendUrl) && status == 403 && router.currentRoute.name !== 'Login' &&  router.currentRoute.name !== 'Register'){
         router.push({name: 'Login', params: { errorMessage: 'Please login' }})
     
     return
