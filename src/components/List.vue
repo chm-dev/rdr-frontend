@@ -1,23 +1,32 @@
 <template>
   <div>
     <BottomNav />
-    <v-list-item v-for="(article, key) in articles" :key="key">
-      <router-link :to="'/article/' + article.id">
-        <v-list-item-avatar rounded="0">
-          <v-img :src="article.coverUrl" v-if="article.coverUrl"></v-img>
-        </v-list-item-avatar>
-      </router-link>
-      <v-list-item-content>
-        <router-link :to="'/article/' + article.id">
-          <v-list-item-title> {{ article.title }}</v-list-item-title>
-        </router-link>
-        <v-list-item-subtitle>
-          {{ article.summary }}
-        </v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
+    <v-list>
+      <v-expansion-panels flat inset>
+        <div v-for="(article, key) in articles" :key="key">
+          <v-list-item three-line>
+            <v-list-item-content class="pr-2">
+              <router-link :to="'/article/' + article.id">
+                <h4> {{ article.title }}</h4>
+              </router-link>
+              <v-list-item-subtitle @click="expandSummary" style="height: 2.4em;">
+                <span>{{ article.summary }}</span>
+                <v-icon style="opacity: .3;position: absolute; bottom: .4em; right: -5px">mdi-chevron-down</v-icon>
+              </v-list-item-subtitle>
 
-    <v-divider v-if="articles.length > key + 1" inset></v-divider>
+            </v-list-item-content>
+            <v-list-item-avatar right :left="false" rounded="0" size="75">
+              <router-link :to="'/article/' + article.id" style="text-decoration: none">
+                <v-img :src="article.coverUrl" v-if="article.coverUrl"></v-img>
+              </router-link>
+            </v-list-item-avatar>
+
+          </v-list-item>
+
+          <v-divider></v-divider>
+        </div>
+      </v-expansion-panels>
+    </v-list>
   </div>
 </template>
 
@@ -25,9 +34,8 @@
 import config from "../config";
 import axios from "axios";
 import store from "../store";
-
 import BottomNav from "./BottomNav.vue";
-const { backendUrl } = config;
+const { backendUrl }=config;
 
 export default {
   data: () => {
@@ -40,50 +48,89 @@ export default {
   },
   methods: {
     fetchContent: activeTab => {
-      let reqQuery = "?";
-      switch (activeTab) {
+      let reqQuery="?";
+      switch( activeTab ) {
         case "new":
-          reqQuery += "isRead_eq=false";
+          reqQuery+="isRead_eq=false";
           break;
         case "read":
-          reqQuery += "isRead_eq=true";
+          reqQuery+="isRead_eq=true";
           break;
         case "trash":
-          reqQuery += "";
+          reqQuery+="";
           break;
         default:
           break;
       }
-      return new Promise((resolve, reject) => {
+      return new Promise( ( resolve, reject ) => {
         try {
-          axios.get(`${backendUrl}/articles${reqQuery}`).then(res => {
+          axios.get( `${backendUrl}/articles${reqQuery}` ).then( res => {
             resolve(
-              res.data.sort(function(a, b) {
-                const d1 = new Date(a.updated_at);
-                const d2 = new Date(b.updated_at);
-                return d1 > d2 ? -1 : 1;
-              })
+              res.data.sort( function( a, b ) {
+                const d1=new Date( a.updated_at );
+                const d2=new Date( b.updated_at );
+                return d1>d2? -1:1;
+              } )
             );
-          });
-        } catch (err) {
-          reject(err);
+          } );
+        } catch( err ) {
+          reject( err );
         }
-      });
+      } );
+    },
+    expandSummary ( ev ) {
+      if( ev.srcElement.tagName!=='SPAN' ) return;
+
+      const innerHeight=ev.srcElement.offsetHeight;
+      const el=ev.srcElement.parentNode;
+      const icon=el.querySelector( 'i.v-icon' );
+      console.log( icon );
+      if( el.style.height===`${innerHeight}px` ) {
+        icon.className=icon.className.replace( 'mdi-chevron-up', 'mdi-chevron-down' );
+        el.style.height='2.4em';
+      } else {
+        document.querySelectorAll( '.v-list-item .v-list-item__subtitle' ).forEach( el => el.style.height='2.4em' );
+        icon.className=icon.className.replace( 'mdi-chevron-down', 'mdi-chevron-up' );
+        el.style.height=`${innerHeight}px`;
+      }
     }
   },
+
 
   components: {
     BottomNav
   },
-  mounted() {
+  mounted () {
     //  fetchContent( this.$route.params.id ).then( res =>
     //    this.articles=res );
   },
 
-  beforeMount() {
-    this.fetchContent(this.$route.params.id).then(res => (this.articles = res));
+  beforeMount () {
+    this.fetchContent( this.$route.params.id ).then( res => ( this.articles=res ) );
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+a {
+  text-decoration: none;
+}
+
+.v-list-item__content {
+  position: relative;
+  h4 {
+    line-height: 1.1em;
+    max-height: 2.2em;
+    overflow: hidden;
+    position: relative;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  i.v-icon {
+  }
+}
+.v-list-item__subtitle {
+  transition: all 0.3s !important;
+  -webkit-line-clamp: unset !important;
+}
+</style>
