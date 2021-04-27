@@ -6,11 +6,24 @@ module.exports = {
     name                           : 'RDR',
     appleMobileWebAppCapable       : 'yes',
     appleMobileWebAppStatusBarStyle: 'black',
-    workboxPluginMode              : 'GenerateSW'
+    workboxPluginMode              : 'GenerateSW',
+    workboxOptions: {
+     
+    },
+    manifestPath                   :  './manifest.json',
+    manifestOptions: {
+      "share_target": {
+        "action": "/add",
+        "method": "GET",
+        "params": {                   
+          "text": "url",          
+        },
+        "enctype": "application/x-www-form-urlencoded"
+      }
+    }
+    
   },
-  configureWebpack     : {
-    plugins: [new GenerateSW()]
-  },
+  
   devServer            : {
     disableHostCheck: true
   }
