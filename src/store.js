@@ -3,9 +3,9 @@ export default {
     tabValues      : [
       'new', 'read', 'trash'
     ],
-    activeTab      : 'new',
     showNav        : true,
     transitionName : 'slide-x-transition',
+    activeTab: 'new',
 
     changeActiveTab: function (tabValue) {
       if (tabValue !== this.activeTab) {
