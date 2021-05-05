@@ -1,14 +1,13 @@
 <template>
-  <v-app class="backdrop-color">
+  <v-app class="backdrop-color" style="height: 100vh; width: 100vw; overflow: auto;">
     <v-main>
-      <v-container class="pa-0">
-        <transition :name="transitionName">
-          <router-view @snackbar="onSnackbar" style="transition: all .5s; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></router-view>
+      <v-container class="pa-0" fluid style="height: 100%;">
+        <transition :name="transitionName" mode="in">
+          <router-view @snackbar="onSnackbar" style="transition: all .3s; position: absolute; left:0; top: 0; width: 100%;"></router-view>
         </transition>
 
       </v-container>
     </v-main>
-
     <v-snackbar v-model="snackbar" timeout="2500">
       {{ snackInfo }}
     </v-snackbar>

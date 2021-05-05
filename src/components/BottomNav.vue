@@ -107,7 +107,7 @@ export default {
       iconName: "mdi-reply",
       dialog: false,
       url: "",
-      listMenu: true
+      listMenu: false
     };
   },
 

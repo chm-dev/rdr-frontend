@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar dense hide-on-scroll fixed>
+    <v-app-bar dense hide-on-scroll fixed scroll-target=".v-application">
       <v-app-bar-nav-icon>
         <v-btn icon @click="goBack()">
           <v-icon>mdi-arrow-left</v-icon>
@@ -11,10 +11,7 @@
           <p class="subtitle-2 pa-0 ma-0" style="line-height: 1em;">
             Added
           </p>
-          <timeago
-            :datetime="new Date(content.updated_at)"
-            class="caption"
-          ></timeago>
+          <timeago :datetime="new Date(content.updated_at)" class="caption"></timeago>
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -26,34 +23,20 @@
       </v-btn>
     </v-app-bar>
     <v-divider></v-divider>
-    <div
-      :style="
+    <div :style="
         'background-image: url(' +
           content.coverUrl +
           '); background-size: cover; background-position: 50% 50%; padding-top: 48px;'
-      "
-    >
-      <div
-        style="background-image: linear-gradient(#fff1, #fff ); backdrop-filter: blur(3px)"
-      >
-        <h1
-          class="h1 text-center white--text py-8 my-0"
-          style="line-height: 1.2em; filter: drop-shadow(0 0 0.5rem #222)"
-        >
+      ">
+      <div style="background-image: linear-gradient(#fff1, #fff ); backdrop-filter: blur(3px)">
+        <h1 class="h1 text-center white--text py-8 my-0" style="line-height: 1.2em; filter: drop-shadow(0 0 0.5rem #222)">
           {{ content.title }}
         </h1>
 
         <v-card class="pa-2 mx-0" style="background-color: transparent">
-          <v-card-title
-            class="pa-0 my-0 text-subtitle-2"
-            style="font-size: 1em; color: #222; filter: drop-shadow(3px 2px 2px.85rem #fff); padding-bottom: 0 !important"
-          >
-            Summary:</v-card-title
-          >
-          <v-card-text
-            class="py-1 my-0 font-weight-regular font-italic"
-            style="color: #223"
-          >
+          <v-card-title class="pa-0 my-0 text-subtitle-2" style="font-size: 1em; color: #222; filter: drop-shadow(3px 2px 2px.85rem #fff); padding-bottom: 0 !important">
+            Summary:</v-card-title>
+          <v-card-text class="py-1 my-0 font-weight-regular font-italic" style="color: #223">
             <blockquote class="blockquote py-1 pl-2 my-0 text-body-2">
               {{ content.summary }}
             </blockquote>
@@ -73,24 +56,24 @@ import config from "../config";
 import axios from "axios";
 import store from "../store";
 
-const { backendUrl } = config;
+const { backendUrl }=config;
 
-const fetchContent = articleId => {
-  console.log(articleId);
-  if (articleId)
-    return new Promise((resolve, reject) => {
+const fetchContent=articleId => {
+  console.log( articleId );
+  if( articleId )
+    return new Promise( ( resolve, reject ) => {
       try {
-        axios.get(`${backendUrl}/articles/${articleId}`).then(res => {
-          resolve(res.data);
-        });
-      } catch (err) {
-        reject(err);
+        axios.get( `${backendUrl}/articles/${articleId}` ).then( res => {
+          resolve( res.data );
+        } );
+      } catch( err ) {
+        reject( err );
       }
-    });
+    } );
 };
 
 export default {
-  data() {
+  data () {
     return {
       showSummary: false,
       from: null,
@@ -99,23 +82,23 @@ export default {
     };
   },
   methods: {
-    goBack() {
-      this.from.name ? this.$router.go(-1) : this.$router.push("/");
+    goBack () {
+      this.from.name? this.$router.go( -1 ):this.$router.push( "/" );
     }
   },
-  mounted() {
-    store.state.toggleNav(false);
+  mounted () {
+    store.state.toggleNav( false );
   },
 
-  beforeRouteEnter(to, from, next) {
-    console.log(to);
-    next(vm => {
-      vm.from = from;
-    });
+  beforeRouteEnter ( to, from, next ) {
+    console.log( to );
+    next( vm => {
+      vm.from=from;
+    } );
   },
 
-  beforeMount() {
-    fetchContent(this.$route.params.id).then(res => (this.content = res));
+  beforeMount () {
+    fetchContent( this.$route.params.id ).then( res => ( this.content=res ) );
   }
 };
 </script>
@@ -125,5 +108,7 @@ figure img,
 .article-html img {
   max-width: 100% !important;
 }
-blockquote {border-left: 3px solid #ccc}
+blockquote {
+  border-left: 3px solid #ccc;
+}
 </style>

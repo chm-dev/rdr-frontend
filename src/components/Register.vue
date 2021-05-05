@@ -1,83 +1,41 @@
 <template>
-  <v-container fluid fill-height>
-    <v-flex>
-      <div class="mx-auto d-block" style="max-width: 640px">
-        <v-card class="elevation-1 mx-auto">
-          <v-toolbar dark>
-            <v-toolbar-title>Register</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <div v-if="errorMessage">
-              <v-alert dense outlined type="error">
-                {{ errorMessage }}
-              </v-alert>
-            </div>
-            <v-form :disabled="locked" v-model="formValid">
-              <v-text-field
-                v-model="login"
-                autofocus
-                prepend-icon="mdi-account"
-                name="login"
-                label="Login"
-                type="text"
-                @keydown="enterHandle"
-                :rules="[() => !!login || 'This field is required']"
-              ></v-text-field>
-              <v-text-field
-                v-model="email"
-                autofocus
-                prepend-icon="mdi-email"
-                name="email"
-                label="Email address(for password reset only)"
-                type="text"
-                @keydown="enterHandle"
-                :rules="[() => !!email || 'This field is required']"
-              ></v-text-field>
-              <v-text-field
-                v-model="password"
-                id="password"
-                prepend-icon="mdi-lock"
-                name="password"
-                label="Password"
-                type="password"
-                @keydown="enterHandle"
-              ></v-text-field>
-              <v-text-field
-                v-model="password2"
-                id="password2"
-                prepend-icon="mdi-lock"
-                name="password2"
-                label="Repeat password"
-                type="password"
-                @keydown="enterHandle"
-                :rules="[
-                  () =>
-                    (!!password2 && password2 === password) ||
-                    'Passwords do not match'
-                ]"
-              ></v-text-field>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              block
-              color="primary"
-              elevation="1"
-              @click="doRegister"
-              :loading="locked"
-              :disabled="!formValid || locked"
-              >Register
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-        <p class="my-4 text-center">or</p>
-        <v-btn text color="primary" block class="" to="/login">
-          Login to existitng account
-        </v-btn>
-      </div>
-    </v-flex>
-  </v-container>
+
+  <v-flex>
+    <div class="mx-auto d-block" style="max-width: 640px">
+      <v-card class="elevation-1 mx-auto">
+        <v-toolbar dark>
+          <v-toolbar-title>Register</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <div v-if="errorMessage">
+            <v-alert dense outlined type="error">
+              {{ errorMessage }}
+            </v-alert>
+          </div>
+          <v-form :disabled="locked" v-model="formValid">
+            <v-text-field v-model="login" autofocus prepend-icon="mdi-account" name="login" label="Login" type="text" @keydown="enterHandle" :rules="[() => !!login || 'This field is required']"></v-text-field>
+            <v-text-field v-model="email" autofocus prepend-icon="mdi-email" name="email" label="Email address(for password reset only)" type="text" @keydown="enterHandle" :rules="[() => !!email || 'This field is required']"></v-text-field>
+            <v-text-field v-model="password" id="password" prepend-icon="mdi-lock" name="password" label="Password" type="password" @keydown="enterHandle"></v-text-field>
+            <v-text-field v-model="password2" id="password2" prepend-icon="mdi-lock" name="password2" label="Repeat password" type="password" @keydown="enterHandle" :rules="[
+                () =>
+                  (!!password2 && password2 === password) ||
+                  'Passwords do not match'
+              ]"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn block color="primary" elevation="1" @click="doRegister" :loading="locked" :disabled="!formValid || locked">Register
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <p class="my-4 text-center">or</p>
+      <v-btn text color="primary" block class="" to="/login">
+        Login to existitng account
+      </v-btn>
+    </div>
+  </v-flex>
+
 </template>
 
 <script>
@@ -102,50 +60,51 @@ export default {
     source: String
   },
   methods: {
-    _doRegister() {
-      alert("soon ;)");
+    _doRegister () {
+      alert( "soon ;)" );
     },
-    doRegister() {
-      if (!this.formValid) return false;
-      this.errorMessage = "";
-      this.locked = true;
-      const _password = this.password;
-      this.password = ""; // so password is an actual input value for as short time as needed
-      console.log(_password);
-      const { backendUrl } = this.config;
+    doRegister () {
+      if( !this.formValid ) return false;
+      this.errorMessage="";
+      this.locked=true;
+      const _password=this.password;
+      this.password=""; // so password is an actual input value for as short time as needed
+      console.log( _password );
+      const { backendUrl }=this.config;
 
       axios
-        .post(`${backendUrl}/auth/local/register`, {
+        .post( `${backendUrl}/auth/local/register`, {
           username: this.login,
           email: this.email,
           password: _password
-        })
-        .then(response => {
+        } )
+        .then( response => {
           // Handle success.
-          this.$emit("snackbar", "Success. Logging you in.");
-          console.log("User token", response.data.jwt);
-          localStorage.jwt = response.data.jwt;
-          axios.defaults.headers.common["Authorization"] =
-            "Bearer " + localStorage.jwt;
-          this.$router.push(this.source || "/");
-        })
-        .catch(error => {
-          this.locked = false;
+          this.$emit( "snackbar", "Success. Logging you in." );
+          console.log( "User token", response.data.jwt );
+          localStorage.jwt=response.data.jwt;
+          axios.defaults.headers.common[ "Authorization" ]=
+            "Bearer "+localStorage.jwt;
+          this.$router.push( this.source||"/" );
+        } )
+        .catch( error => {
+          this.locked=false;
           // Handle error.
-          console.log("An error occurred:", error.response);
-          console.log(error);
-          this.errorMessage =
-            (error.response.data.data &&
-              error.response.data.data[0].messages[0].message) ||
+          console.log( "An error occurred:", error.response );
+          console.log( error );
+          this.errorMessage=
+            ( error.response.data.data&&
+              error.response.data.data[ 0 ].messages[ 0 ].message )||
             "Register error";
-        });
+        } );
     },
 
-    enterHandle(ev) {
-      if (ev.key === "Enter") this.doRegister();
+    enterHandle ( ev ) {
+      if( ev.key==="Enter" ) this.doRegister();
     }
   }
 };
 </script>
 
-<style></style>
+<style>
+</style>

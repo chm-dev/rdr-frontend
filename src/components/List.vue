@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <v-divider inset></v-divider>
     <v-list v-if="articles.length">
       <div v-for="(article, key) in articles" :key="key">
