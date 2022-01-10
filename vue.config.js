@@ -1,3 +1,4 @@
+const path = require( 'path' );
 const CopyPlugin = require( 'copy-webpack-plugin' );
 
 module.exports = {
@@ -52,9 +53,11 @@ module.exports = {
   },
 
   devServer            : {
+    contentBase     : path.join( __dirname, 'dist' ),
     disableHostCheck: true,
     https           : true,
     allowedHosts    : ['all']
   },
+
   configureWebpack     : {}
 };
