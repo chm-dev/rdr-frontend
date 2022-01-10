@@ -1,4 +1,4 @@
-const { InjectManifest } = require( 'workbox-webpack-plugin' );
+const CopyPlugin = require( 'copy-webpack-plugin' );
 
 module.exports = {
   transpileDependencies: ['vuetify'],
@@ -8,11 +8,12 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: 'black',
     workboxPluginMode              : 'InjectManifest',
     workboxOptions                 : {
-      swSrc: './src/sw.js'
+      swSrc : './public/js/sw.js',
+      swDest: './sw.js'
     },
     manifestPath                   : './manifest.json',
     manifestOptions                : {
-      theme_color     : '#ff9100',
+      theme_color     : '#37474f',
       background_color: '#ffffff',
       display         : 'standalone',
       scope           : '/',
@@ -38,15 +39,15 @@ module.exports = {
           sizes: '512x512',
           type : 'image/png'
         }
-      ]
-    },
-    share_target                   : {
-      action : '/add',
-      method : 'GET',
-      params : {
-        text: 'url'
-      },
-      enctype: 'application/x-www-form-urlencoded'
+      ],
+      share_target    : {
+        action : '/add',
+        method : 'GET',
+        params : {
+          text: 'url'
+        },
+        enctype: 'application/x-www-form-urlencoded'
+      }
     }
   },
 
@@ -54,5 +55,6 @@ module.exports = {
     disableHostCheck: true,
     https           : true,
     allowedHosts    : ['all']
-  }
+  },
+  configureWebpack     : {}
 };

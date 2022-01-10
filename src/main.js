@@ -18,8 +18,11 @@ Vue.config.productionTip = false;
 Vue.config.devtools      = true;
 
 import App from './App.vue';
-import './registerServiceWorker';
+import wb from './registerServiceWorker';
 import axios from 'axios';
+
+
+Vue.prototype.$workbox = wb;
 
 Vue.use(VueRouter);
 Vue.use(VueTimeago, {
