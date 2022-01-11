@@ -42,7 +42,7 @@ export default {
     return {
       articles: [],
       store: store,
-      activeTab: '',
+      activeTab: "",
       key: 0
     };
   },
@@ -57,7 +57,7 @@ export default {
           reqQuery+="isRead_eq=true";
           break;
         case "trash":
-          reqQuery+="";
+          reqQuery+=""; //to be added
           break;
         default:
           break;
@@ -116,7 +116,6 @@ export default {
     next( vm => {
       vm.fetchContent( vm.$route.params.id ).then( res => ( vm.articles=res ) );
     } );
-
   },
 
   beforeRouteUpdate ( to, from, next ) {
@@ -124,9 +123,7 @@ export default {
     next();
   },
 
-  beforeMount () {
-
-  }
+  beforeMount () { }
 };
 </script>
 
