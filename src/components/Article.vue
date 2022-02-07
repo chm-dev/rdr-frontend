@@ -16,7 +16,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
+        <v-icon>mdi-link</v-icon>
       </v-btn>
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
@@ -46,8 +46,9 @@
     </div>
 
     <v-container>
-      <p v-if="content.content && content.content.html" v-html="content.content.html.replace('<img','<v-img').replace('</img','</v-img')" class="article-html"></p>
+      <p v-if="content.content && content.content.html" v-html="content.content.html" class="article-html"></p>
     </v-container>
+
   </div>
 </template>
 
@@ -83,14 +84,13 @@ export default {
   },
   methods: {
     goBack () {
-      this.from.name? this.$router.go( -1 ):this.$router.push( "/" );
+      ( this.from&&this.from.name )? this.$router.go( -1 ):this.$router.push( "/" );
     }
   },
   mounted () {
     store.state.toggleNav( false );
-
-
   },
+
 
   beforeRouteEnter ( to, from, next ) {
     console.log( to );
@@ -111,14 +111,14 @@ figure img,
 .article-html img,
 .article-html iframe {
   max-width: 100% !important;
+  display: block;
+  margin:1em auto;
+  
 }
 
 .article-html iframe {
   width: 60vw;
   height: 40vw;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }
 blockquote {
   border-left: 3px solid #ccc;
