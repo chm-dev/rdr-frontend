@@ -46,7 +46,7 @@
     </div>
 
     <v-container>
-      <p v-html="content.content" class="article-html"></p>
+      <p v-if="content.content && content.content.html" v-html="content.content.html.replace('<img','<v-img').replace('</img','</v-img')" class="article-html"></p>
     </v-container>
   </div>
 </template>
@@ -88,6 +88,8 @@ export default {
   },
   mounted () {
     store.state.toggleNav( false );
+
+
   },
 
   beforeRouteEnter ( to, from, next ) {
@@ -98,15 +100,25 @@ export default {
   },
 
   beforeMount () {
-    fetchContent( this.$route.params.id ).then( res => ( this.content=res ) );
+    fetchContent( this.$route.params.id ).then( res => this.content=res );
+
   }
 };
 </script>
 
 <style lang="css">
 figure img,
-.article-html img {
+.article-html img,
+.article-html iframe {
   max-width: 100% !important;
+}
+
+.article-html iframe {
+  width: 60vw;
+  height: 40vw;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 blockquote {
   border-left: 3px solid #ccc;

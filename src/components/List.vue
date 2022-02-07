@@ -37,15 +37,19 @@ import store from "../store";
 import BottomNav from "./BottomNav.vue";
 const { backendUrl }=config;
 
+
 export default {
+
   data: () => {
+
     return {
+      activeTab: '',
       articles: [],
       store: store,
-      activeTab: "",
       key: 0
     };
   },
+
   methods: {
     fetchContent: activeTab => {
       let reqQuery="?";
@@ -62,7 +66,9 @@ export default {
         default:
           break;
       }
+
       return new Promise( ( resolve, reject ) => {
+
         try {
           axios.get( `${backendUrl}/articles${reqQuery}` ).then( res => {
             resolve(
@@ -84,7 +90,7 @@ export default {
       const innerHeight=ev.srcElement.offsetHeight;
       const el=ev.srcElement.parentNode;
       const icon=el.querySelector( "i.v-icon" );
-      console.log( icon );
+
       if( el.style.height===`${innerHeight}px` ) {
         icon.className=icon.className.replace(
           "mdi-chevron-up",
@@ -108,21 +114,52 @@ export default {
     BottomNav
   },
   mounted () {
-    //  fetchContent( this.$route.params.id ).then( res =>
-    //    this.articles=res );
+    this.fetchContent( this.activeTab ).then( res => {
+      //articles has lstorage value at this point
+      if( JSON.stringify( this.articles )!=JSON.stringify( res ) ) {
+        this.articles=res;
+        let articlesCached=JSON.parse( localStorage.getItem( 'articlesCached' ) );
+        articlesCached[ this.activeTab ]=res;
+        localStorage.setItem( 'articlesCached', JSON.stringify( articlesCached ) ); //update lstorage cache
+        console.log( `Saved cached articles to ${this.activeTab}` );
+      }
+    } );
   },
 
   beforeRouteEnter ( to, from, next ) {
+    const activeTab=to.params.id;
+    console.log( to );
+    let articlesCached=JSON.parse( localStorage.getItem( 'articlesCached' ) ); // if ls.cache is not here something went wrong
+    const articles=articlesCached? articlesCached[ activeTab ]:[];
+
     next( vm => {
-      vm.fetchContent( vm.$route.params.id ).then( res => ( vm.articles=res ) );
+      vm.articles=articles;
+      vm.activeTab=activeTab;
+
+
     } );
   },
 
   beforeRouteUpdate ( to, from, next ) {
-    this.fetchContent( to.params.id ).then( res => ( this.articles=res ) );
-    next();
-  },
+    console.log( 'UPDATE' );
+    const activeTab=to.params.id;
 
+    let articlesCached=JSON.parse( localStorage.getItem( 'articlesCached' ) ); // if ls.cache is not here something went wrong
+    const articles=articlesCached[ activeTab ]||[];
+    this.fetchContent( activeTab ).then( res => {
+      //articles has lstorage value at this point
+      console.log(this.articles);
+      console.log(res);
+      if( JSON.stringify( this.articles )!=JSON.stringify( res ) ) {
+        this.articles=res;
+        let articlesCached=JSON.parse( localStorage.getItem( 'articlesCached' ) );
+        articlesCached[ this.activeTab ]=res;
+        localStorage.setItem( 'articlesCached', JSON.stringify( articlesCached ) ); //update lstorage cache
+        console.log( `Saved cached articles to ${this.activeTab}` );
+      }
+    } );
+    next( vm => { vm.articles=articles; this.activeTab=activeTab; } );
+  },
   beforeMount () { }
 };
 </script>
@@ -142,8 +179,7 @@ a {
     font-weight: 500;
     margin-bottom: 4px;
   }
-  i.v-icon {
-  }
+
 }
 .v-list-item__subtitle {
   transition: all 0.3s !important;

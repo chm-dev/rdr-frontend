@@ -38,7 +38,7 @@ export default {
 
   },
   mounted () {
-    console.log( this.$route );
+
   },
   created () {
     if( this.$workbox ) {
@@ -46,6 +46,13 @@ export default {
         this.showUpdateUI=true;
       } );
     }
+    // init localstorage cache
+    if( !localStorage.getItem( 'articlesCached' ) ) {
+      const articleCacheStructure=JSON.stringify( { new: {}, read: {}, trash: {} } ); //move to config if more complex ?
+      localStorage.setItem( 'articlesCached', articleCacheStructure );
+
+    }
+
   },
   async accept () {
     this.showUpdateUI=false;

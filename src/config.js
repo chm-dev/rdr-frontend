@@ -1,1 +1,3 @@
-export default {backendUrl: 'https://r.chm.codes:1337'};
+export default {
+  backendUrl: 'https://rdr.chm.codes:1337',
+};

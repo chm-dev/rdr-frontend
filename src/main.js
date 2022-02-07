@@ -21,7 +21,6 @@ import App from './App.vue';
 import wb from './registerServiceWorker';
 import axios from 'axios';
 
-
 Vue.prototype.$workbox = wb;
 
 Vue.use(VueRouter);

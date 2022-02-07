@@ -1,5 +1,5 @@
 const path = require( 'path' );
-const CopyPlugin = require( 'copy-webpack-plugin' );
+
 
 module.exports = {
   transpileDependencies: ['vuetify'],
@@ -55,9 +55,11 @@ module.exports = {
   devServer            : {
     contentBase     : path.join( __dirname, 'dist' ),
     disableHostCheck: true,
-    https           : true,
+    https           : false,
     allowedHosts    : ['all']
   },
 
-  configureWebpack     : {}
+  configureWebpack     : {
+    devtool: 'source-map'
+  }
 };

@@ -14,7 +14,7 @@
                   {{activeTabIcon}}</v-icon>
               </v-btn>
             </template>
-            <v-row no-gutters v-if="activeTab !== tabValues[0]">
+            <v-row no-gutters>
               <v-col cols="3">
                 <v-btn @click="activeTab = tabValues[0]" small fab dark color="secondary">
                   <v-icon rounded>chm-reading-newspaper</v-icon>
@@ -24,7 +24,7 @@
                 <span class="fab-desc pa-1 secondary elevation-2">reading list</span>
               </v-col>
             </v-row>
-            <v-row no-gutters v-if="activeTab !== tabValues[1]">
+            <v-row no-gutters >
               <v-col cols="3">
                 <v-btn @click="activeTab = tabValues[1]" small fab dark color="primary">
                   <v-icon rounded>mdi-checkbox-marked-outline</v-icon>
@@ -35,7 +35,7 @@
               </v-col>
             </v-row>
 
-            <v-row no-gutters v-if="activeTab !== tabValues[2]">
+            <v-row no-gutters >
               <v-col cols="3">
                 <v-btn small fab style="background-color: var(--v-bgcolor-base)" @click="activeTab = tabValues[2]">
                   <v-icon color="primary" style="text-shadow: unset">mdi-archive-outline</v-icon>
@@ -139,7 +139,7 @@ export default {
   beforeRouteEnter ( to, from, next ) {
     console.log( to.params.id );
     next( vm => {
-      console.log( 'hej' );
+
       console.log( vm.activeTab );
       vm.activeTab=to.params.id;
     } );
@@ -147,7 +147,7 @@ export default {
 
   watch: {
     activeTab ( newValue ) {
-      console.log( this.$route );
+      //console.log( this.$route );
       store.state.changeActiveTab( newValue );
       this.$router.push( "/list/"+newValue );
     }
