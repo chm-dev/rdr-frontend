@@ -16,4 +16,11 @@ Main inspiration was a [pwa native share capability on android devices](https://
 
 This is still work in progress and some important features are still missing (ie removing saved articles from frontend etc)
 
+### Screenshots
+
+![Main Feed](https://github.com/chm-dev/rdr-frontend/raw/master/public/img/screenshot1.png)
+![Article](https://github.com/chm-dev/rdr-frontend/raw/master/public/img/screenshot2.png)
+
 ### [Demo](https://rdr.chm.codes)
+
+
