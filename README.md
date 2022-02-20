@@ -6,7 +6,7 @@ This is frontend for simple "Read it later" / "Pocket" clone as Progressive WebA
 
 Main inspiration was a [pwa native share capability on android devices](https://web.dev/web-share/).
 
-* Frontend is created using Vue2
+* Frontend is created using Vue2 and [Vutify](https://vuetifyjs.com/en/)
 * [Backend](https://github.com/chm-dev/rdr-backend) created in [Strapi](https://strapi.io)
 * It is a PWA which can be installed on android.
 * Content can be saved from any android app / browser using native share action.
