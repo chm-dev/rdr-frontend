@@ -21,6 +21,7 @@ This is still work in progress and some important features are still missing (ie
 ![Main Feed](https://github.com/chm-dev/rdr-frontend/raw/master/public/img/screenshot1.png)
 ![Article](https://github.com/chm-dev/rdr-frontend/raw/master/public/img/screenshot2.png)
 
-### [Demo](https://rdr.chm.codes)
+### [Demo](https://rdr.chm.dev)
+test user: demo / demotestpassword
 
 
